@@ -3,40 +3,95 @@ import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const App = () => {
-  const [unitsConsumed, setUnitsConsumed] = useState(15);
-  const [amount, setAmount] = useState(15);
-  const [plan,setPlan] = useState(false);
+  const [liveCurrent, setLiveCurrent] = useState(0.5);
+  const [monthlyUsage, setMonthlyUsage] = useState(5);
+  const [amount, setAmount] = useState(56);
+
+  
+  const PastLog = [
+    {
+      month: 'dec',
+      amt: '15 ₹',
+      saved: '14 ₹',
+    },
+    {
+      month: 'nov',
+      amt: '15 ₹',
+      saved: '14 ₹',
+    },
+    {
+      month: 'oct',
+      amt: '15 ₹',
+      saved: '14 ₹',
+    },
+  ];
 
   return (
     <View style={styles.container}>
       <View style={styles.nav}>
         <View></View>
-        <Text style={styles.text}>
-          Consumer
-        </Text>
+        <Text style={styles.text}>Consumer</Text>
         <Icon name="user" size={40} color="#000" />
       </View>
+
       <View style={styles.content}>
-        <View style={styles.consumed}>
-          <Text style={styles.consumedText}>
-            Units Consumed
-          </Text>
-          <Text style={styles.dis}>
-            {unitsConsumed}
-          </Text>
+        <View style={styles.box}>
+          <Text>Live current</Text>
+          <Text style={styles.boxText}>{liveCurrent}</Text>
         </View>
         <View style={styles.line}></View>
-        <View style={styles.amount}>
-          <Text>
-            Amount
-          </Text>
-          <Text style={styles.dis}>
-            {amount}
-          </Text>
+        <View style={styles.box}>
+          <Text>Monthly</Text>
+          <Text style={styles.boxText}>{monthlyUsage}</Text>
+        </View>
+        <View style={styles.line}></View>
+        <View style={styles.box}>
+          <Text>Amount</Text>
+          <Text style={styles.boxText}>{amount}</Text>
         </View>
       </View>
-      <View style={styles.plan}>
 
+      <View style={styles.past}>
+        <Text style={styles.pastBlock}>Past Logs</Text>
+
+        <View style={styles.log}>
+          <View style={styles.header}>
+            <View style={styles.tablecell}>
+              <Text style={styles.bold}>Month</Text>
+            </View>
+            <View style={styles.vertical}></View>
+            <View style={styles.tablecell}>
+              <Text style={styles.bold}>Amount</Text>
+            </View>
+            <View style={styles.vertical}></View>
+            <View style={styles.tablecell}>
+              <Text style={styles.bold}>Saved</Text>
+            </View>
+          </View>
+          <View style={styles.blacklinehor}></View>
+
+          {PastLog.map((log, index) => (
+            <View>
+            <View key={index} style={styles.row}>
+              <View style={styles.tablecell}>
+                <Text>{log.month}</Text>
+              </View>
+              <View style={styles.vertical}></View>
+              <View style={styles.tablecell}>
+                <Text>{log.amt}</Text>
+              </View>
+              <View style={styles.vertical}></View>
+              <View style={styles.tablecell}>
+                <Text>{log.saved}</Text>
+              </View>
+            
+
+            </View>
+            <View style={styles.blacklinehor}></View>
+
+            </View>
+          ))}
+        </View>
       </View>
     </View>
   );
@@ -45,7 +100,7 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#DAF5FF",
+    backgroundColor: '#DAF5FF',
     paddingTop: 50,
     paddingRight: 20,
   },
@@ -65,47 +120,71 @@ const styles = StyleSheet.create({
     marginTop: 30,
     width: 340,
     height: 120,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     flexDirection: 'row',
-  
   },
-  consumed: {
-    paddingLeft: 15,
-    paddingTop: 5,
-    padding: 60,
-  },
-  consumedText: {
-    fontSize: 14,
-  },
-  amount: {
+  box: {
+    flex: 0.33,
     paddingLeft: 10,
-    paddingRight: 15,
+    paddingTop: 18,
+    alignItems: 'center',
+  },
+  boxText: {
+    fontSize: 34,
   },
   line: {
-    width: 3,
-    height: 122,
+    width: 4,
+    height: 120,
     backgroundColor: '#DAF5FF',
   },
-  dis:{
-    fontSize:45,
+  past: {
+    marginLeft: 40,
+    marginRight: 40,
+    marginTop: 15,
+    width: 340,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    paddingBottom:20,
   },
-  plan:{
-    marginTop:20,
-    width:340,
-    height:120,
-    backgroundColor:"white",
-    marginLeft:40,
-    marginRight:40,
-    borderRadius:20,
+  pastBlock: {
+    fontSize: 14,
+    paddingLeft: 25,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
-  activePlan:{
+  
+    log: {
+      backgroundColor: '#E9ECF5',
+      width: 300,
+      marginLeft: 20,
+      borderRadius: 10,
     
-  },inactivePlan:{
-
+  },
+  blacklinehor: {
+    width: 300,
+    height: 1,
+    backgroundColor: 'grey',
+  },
+  header: {
+    flexDirection: 'row',
+  },
+  tablecell: {
+    padding: 7,
+    flex: 0.33,
+    paddingLeft: 30,
+  },
+  vertical: {
+    width: 1,
+    height: 35,
+    backgroundColor: 'grey',
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  bold:{
+    fontWeight:'bold',
   }
-
-
 });
 
 export default App;
