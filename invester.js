@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import {RAZORPAY_KEY_ID,RAZORPAY_KEY_SECRET} from '@env';
 const App = () => {
- 
+  let razorpaykeyid = RAZORPAY_KEY_ID;
+  let razorpaykeysecret = RAZORPAY_KEY_SECRET;
+  let amt  = 100;
+  let currency ="INR";
+  function handler(){
+
+  };
+//  console.log(RAZORPAY_KEY_ID,RAZORPAY_KEY_SECRET);
 
   const currentprosumerList = [
     {
@@ -72,7 +80,9 @@ const App = () => {
             <Text style={styles.dataCell}>{prosumer.id}</Text>
             <Text style={styles.dataCell}>{prosumer.name}</Text>
             <Text style={styles.dataCell}>{prosumer.interest}</Text>
-            <View style={styles.buy}><Text style={styles.buyBox} >Buy</Text></View>
+            <TouchableOpacity onPress={handler} style={styles.buy}>
+        <Text style={styles.buyBox}>Buy</Text>
+      </TouchableOpacity>
             
           </View>
         ))}
