@@ -1,17 +1,37 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import RazorpayCheckout from 'react-native-razorpay'; // Import the native module
 
-import {RAZORPAY_KEY_ID,RAZORPAY_KEY_SECRET} from '@env';
+
 const App = () => {
-  let razorpaykeyid = RAZORPAY_KEY_ID;
-  let razorpaykeysecret = RAZORPAY_KEY_SECRET;
-  let amt  = 100;
-  let currency ="INR";
-  function handler(){
+  let razorpaykeyid = 'rzp_test_QVenJj3VCLnFPS';
+  let razorpaykeysecret = 'P0Glx7vmiH8VrQTB94hsDvBR';
+  let amt = 100;
 
-  };
-//  console.log(RAZORPAY_KEY_ID,RAZORPAY_KEY_SECRET);
+  function handler() {
+    console.log(razorpaykeyid,razorpaykeysecret)
+    var options = {
+      description: 'payment',
+      image: '',
+      currency: 'INR',
+      key: 'rzp_test_QVenJj3VCLnFPS',
+      amount: '5000',
+      name: 'Corp',
+      order_id: '',
+      prefill: {
+        email: 'investor@example.com',
+        contact: '9191919191',
+        name: 'investor'
+      },
+      theme: {color: '#53a20e'}
+    }
+    RazorpayCheckout.open(options).then((data) => {
+      alert(`Success: ${data.razorpay_payment_id}`);
+    }).catch((error) => {
+      alert(`Error: ${error.code} | ${error.description}`);
+    });    
+  }
 
   const currentprosumerList = [
     {
@@ -33,47 +53,40 @@ const App = () => {
       left: '35',
     },
   ];
+
   const AvailableprosumerList = [
     {
       id: 'id156',
       name: 'XYZ',
-      interest:25
+      interest: 25,
     },
     {
       id: 'id157',
       name: 'ABC',
-      
-      interest:20
+      interest: 20,
     },
     {
       id: 'id158',
       name: 'PQR',
-      interest:30
+      interest: 30,
     },
   ];
 
   return (
     <View style={styles.container}>
-    <View style={styles.nav}>
-      <View></View>
-      <Text style={styles.text}>
-        Investor
-      </Text>
-      <Icon name="user" size={40} color="#000" />
-    </View>
+      <View style={styles.nav}>
+        <View></View>
+        <Text style={styles.text}>Investor</Text>
+        <Icon name="user" size={40} color="#000" />
+      </View>
 
-    
-
-    <Text style={styles.headingText}>Available Prosumer Details:</Text>
+      <Text style={styles.headingText}>Available Prosumer Details:</Text>
       <View style={styles.table}>
         <View style={styles.headerRow}>
           <Text style={styles.headerCell}>ID</Text>
           <Text style={styles.headerCell}>NAME</Text>
           <Text style={styles.headerCell}>INTEREST</Text>
           <Text style={styles.headerCell}>PAY</Text>
-
-
-         
         </View>
         {AvailableprosumerList.map((prosumer, index) => (
           <View key={index} style={styles.dataRow}>
@@ -81,12 +94,12 @@ const App = () => {
             <Text style={styles.dataCell}>{prosumer.name}</Text>
             <Text style={styles.dataCell}>{prosumer.interest}</Text>
             <TouchableOpacity onPress={handler} style={styles.buy}>
-        <Text style={styles.buyBox}>Buy</Text>
-      </TouchableOpacity>
-            
+              <Text style={styles.buyBox}>Buy</Text>
+            </TouchableOpacity>
           </View>
         ))}
       </View>
+
       <Text style={styles.headingText}>Current Prosumer Details:</Text>
       <View style={styles.table}>
         <View style={styles.headerRow}>
