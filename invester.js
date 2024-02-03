@@ -3,13 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const App = () => {
-  const [glive, setglive] = useState(0.33);
-  const [gmonthly, setgmonthly] = useState(12);
-  const [gamt, setgmt] = useState(5);
-
-  const [ulive, setulive] = useState(0.3);
-  const [umonthly, setumonthly] = useState(20);
-  const [uamt, setuamt] = useState(6);
+ 
 
   const currentprosumerList = [
     {
@@ -68,6 +62,8 @@ const App = () => {
           <Text style={styles.headerCell}>ID</Text>
           <Text style={styles.headerCell}>NAME</Text>
           <Text style={styles.headerCell}>INTEREST</Text>
+          <Text style={styles.headerCell}>PAY</Text>
+
 
          
         </View>
@@ -76,7 +72,7 @@ const App = () => {
             <Text style={styles.dataCell}>{prosumer.id}</Text>
             <Text style={styles.dataCell}>{prosumer.name}</Text>
             <Text style={styles.dataCell}>{prosumer.interest}</Text>
-
+            <View style={styles.buy}><Text style={styles.buyBox} >Buy</Text></View>
             
           </View>
         ))}
@@ -181,10 +177,23 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
   },
   dataCell: {
-    fontSize: 16,
+    fontSize: 18,
     flex: 1,
     textAlign: 'center',
+    padding:7,
   },
+  buy:{
+    backgroundColor:'blue',
+    color:'white',
+    width:70,
+    height:30,
+    borderRadius:10,
+    alignItems:'center',
+    marginTop:7,
+  },buyBox:{
+    color:'white',
+    fontSize:18,
+  }
 });
 
 export default App;
