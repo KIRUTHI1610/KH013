@@ -1,0 +1,48 @@
+int currentpin = 12;
+float R1 = 33000.0;
+float R2 = 2200.0;
+void setup() {
+Serial.begin(115200);
+pinMode(currentpin, INPUT);
+}
+void loop() 
+{
+int adc = analogRead(currentpin);
+float adc_voltage = adc * (3.3 / 4096.0);
+float current_voltage = (adc_voltage * (R1+R2)/R2);
+float current = (current_voltage - 2.5) / 0.100;
+Serial.println(adc);
+Serial.print("Current Value: ");
+Serial.println(current);
+delay(1000);
+}
+float getAnalogAmp()
+{
+  //Measuring Current Using ACS712
+
+  int   sampling = 250;
+
+  double mVperAmp = 100; // use 185 for 5A Module, 100 for 20A Module, and 66 for 30A Module
+  float ACSoffset = 2470.345;
+
+  double RawValue = 0;
+  double V = 0;
+  double Amps = 0;
+
+  for(int i=0; i<sampling; i++)
+    {
+    RawValue += analogRead(ADC_AMP);
+    delay(1);
+    }
+  
+  RawValue /= sampling;
+   
+  V = (RawValue / 1023.0) * 5000; // Gets you mV
+  Amps = ((V - ACSoffset) / mVperAmp);
+
+  Serial.print( "Amps:");
+  Serial.println( Amps );
+  return Amps;
+
+  
+}
