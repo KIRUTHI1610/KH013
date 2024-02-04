@@ -1,39 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { db } from '../firebase';
+import { ref, onValue } from 'firebase/database';
 
 const Consumer = () => {
   const [liveCurrent, setLiveCurrent] = useState(0.5);
   const [monthlyUsage, setMonthlyUsage] = useState(5);
   const [amount, setAmount] = useState(56);
+  const [pastLog, setPastLog] = useState([]); 
 
-  
-  const PastLog = [
-    {
-      month: 'dec',
-      amt: '15 ₹',
-      saved: '14 ₹',
-    },
-    {
-      month: 'nov',
-      amt: '15 ₹',
-      saved: '14 ₹',
-    },
-    {
-      month: 'oct',
-      amt: '15 ₹',
-      saved: '14 ₹',
-    },
-  ];
+  useEffect(() => {
+    const fetchData = () => {
+      const amountRef = ref(db, 'CONSUMER/Amount');
+      const monthlyRef = ref(db, 'CONSUMER/Monthly');
+      const liveRef = ref(db, 'CONSUMER/Live current');
+      const pastLogRef = ref(db, 'CONSUMER/pastlog');
+
+      onValue(amountRef, (snapshot) => {
+        const val = snapshot.val();
+        setAmount(val);
+      });
+
+      onValue(monthlyRef, (snapshot) => {
+        const val = snapshot.val();
+        setMonthlyUsage(val * 10);
+      });
+
+      onValue(liveRef, (snapshot) => {
+        const val = snapshot.val();
+        const roundedVal = Number(val).toFixed(2);
+        setLiveCurrent(roundedVal);
+      });
+
+      onValue(pastLogRef, (snapshot) => {
+        const pastLogs = [];
+        snapshot.forEach((childSnapshot) => {
+          const logData = childSnapshot.val();
+          pastLogs.push(logData);
+        });
+        setPastLog(pastLogs);
+        console.log(pastLog);
+      });
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.nav}>
-        <View></View>
-        <Text style={styles.text}>Consumer</Text>
-        <Icon name="user" size={40} color="#000" />
-      </View> */}
-
       <View style={styles.content}>
         <View style={styles.box}>
           <Text>Live current</Text>
@@ -50,10 +64,8 @@ const Consumer = () => {
           <Text style={styles.boxText}>{amount}</Text>
         </View>
       </View>
-
       <View style={styles.past}>
         <Text style={styles.pastBlock}>Past Logs</Text>
-
         <View style={styles.log}>
           <View style={styles.header}>
             <View style={styles.tablecell}>
@@ -69,28 +81,21 @@ const Consumer = () => {
             </View>
           </View>
           <View style={styles.blacklinehor}></View>
-
-          {PastLog.map((log, index) => (
-            <View>
-            <View key={index} style={styles.row}>
+          
+            <View style={styles.row}>
               <View style={styles.tablecell}>
-                <Text>{log.month}</Text>
+                <Text>{pastLog[1]}</Text>
               </View>
               <View style={styles.vertical}></View>
               <View style={styles.tablecell}>
-                <Text>{log.amt}</Text>
+                <Text>{pastLog[0]}</Text>
               </View>
               <View style={styles.vertical}></View>
               <View style={styles.tablecell}>
-                <Text>{log.saved}</Text>
+                <Text>{pastLog[2]}</Text>
               </View>
-            
-
             </View>
-            <View style={styles.blacklinehor}></View>
-
-            </View>
-          ))}
+          
         </View>
       </View>
     </View>
@@ -187,4 +192,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Consumer;
+export default Consumer
