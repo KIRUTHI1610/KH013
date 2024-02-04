@@ -1,13 +1,86 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { db } from '../firebase';
+import { ref, onValue } from 'firebase/database';
 
 const Investor = () => {
-  let razorpaykeyid = '';
-  let razorpaykeysecret = '';
-  let amt  = 100;
-  let currency ="INR";
+  const [avaiID, setavaiID] = useState(0);
+  const [avaiName, setavaiName] = useState(0);
+  const [avaiInterest, setAvaiInterest] = useState(0);
+
+
+  const [ID, setID] = useState(0);
+  const [Name, setName] = useState(0);
+  const [Token, setToken] = useState(0);
+  const [Left, setLeft] = useState(0);
+
+
+
+  useEffect(() => {
+    const fetchData = () => {
+
+      //available
+      const availid = ref(db, 'Invester/Available Prosumer details/ID');
+      const availname = ref(db, 'Invester/Available Prosumer details/Name');
+      const availinterest = ref(db, 'Invester/Available Prosumer details/Interest');
+
+      onValue(availid, (snapshot) => {
+        const val = snapshot.val();
+        setavaiID(val);
+      });
+
+      onValue(availname, (snapshot) => {
+        const val = snapshot.val();
+        setavaiName(val);
+      });
+
+      onValue(availinterest, (snapshot) => {
+        const val = snapshot.val();
+        
+        setAvaiInterest(val);
+      });
+      
+
+      //current
+      const id = ref(db, 'Invester/Current prosumer details/ID');
+      const name = ref(db, 'Invester/Current prosumer details/Name');
+      const token = ref(db, 'Invester/Current prosumer details/Token');
+      const left = ref(db, 'Invester/Current prosumer details/Left');
+      
+      onValue(id, (snapshot) => {
+        const val = snapshot.val();
+        // console.log(val);
+        setID(val);
+      });
+
+      onValue(name, (snapshot) => {
+        const val = snapshot.val();
+        setName(val);
+      });
+
+      onValue(token, (snapshot) => {
+        const val = snapshot.val();
+        
+        setToken(val);
+      });
+      
+
+      onValue(left, (snapshot) => {
+        const val = snapshot.val();
+        
+        setLeft(val);
+      });
+
+      
+    };
+
+    fetchData();
+  }, []);
+
+
+
+
   function handler(){
 
   };
@@ -15,41 +88,22 @@ const Investor = () => {
 
   const currentprosumerList = [
     {
-      id: 'id156',
-      name: 'XYZ',
-      token: '14',
-      left: '50',
+      id: ID,
+      name: Name,
+      token: Token,
+      left: Left,
     },
-    {
-      id: 'id157',
-      name: 'ABC',
-      token: '15',
-      left: '40',
-    },
-    {
-      id: 'id158',
-      name: 'PQR',
-      token: '12',
-      left: '35',
-    },
+    
+    
   ];
   const AvailableprosumerList = [
     {
-      id: 'id156',
-      name: 'XYZ',
-      interest:25
+      id: avaiID,
+      name: avaiName,
+      interest:avaiInterest,
     },
-    {
-      id: 'id157',
-      name: 'ABC',
-      
-      interest:20
-    },
-    {
-      id: 'id158',
-      name: 'PQR',
-      interest:30
-    },
+    
+    
   ];
 
   return (
