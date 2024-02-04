@@ -6,6 +6,7 @@
 
 #define WIFI_SSID "Abcdefg"
 #define WIFI_PASSWORD "12349876"
+#define FIREBASE_HOST "https://p2p-zhagaram-default-rtdb.firebaseio.com/"
 #define API_KEY "AIzaSyCXOKF8rv5iFJhogAU8VqF7Y8POW_ZBf-k"
 #define USER_EMAIL "hemakrishnan@gmail.com"
 #define USER_PASSWORD "Dhoni7781#"
@@ -14,9 +15,7 @@ FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
 String uid;
-int currentpin = 12;
-float R1 = 33000.0;
-float R2 = 2200.0;
+int ADC_AMP = 32;
 void initWiFi() {
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connecting to WiFi ..");
@@ -36,6 +35,7 @@ void setup(){
   auth.user.password = USER_PASSWORD;
   Firebase.reconnectWiFi(true);
   fbdo.setResponseSize(4096);
+  config.database_url = FIREBASE_HOST;
   config.token_status_callback = tokenStatusCallback;
   config.max_token_generation_retry = 5;
   Firebase.begin(&config, &auth);
@@ -52,6 +52,8 @@ void setup(){
 void loop(){
   double a=getAnalogAmp();
   Serial.println(a);
+  Firebase.RTDB.setFloat(&fbdo, "/CONSUMER/Live current", a);
+  Serial.println("PATH: " + fbdo.dataPath());
   delay(1000);
   if (Firebase.isTokenExpired()){
     Firebase.refreshToken(&config);
