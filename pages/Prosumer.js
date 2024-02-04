@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+
+import { db } from '../firebase';
+import { ref, onValue } from 'firebase/database';
 
 const Prosumer = () => {
   const [glive, setglive] = useState(0.33);
@@ -11,25 +13,100 @@ const Prosumer = () => {
   const [umonthly, setumonthly] = useState(20);
   const [uamt, setuamt] = useState(6);
 
+  const [ID, setID] = useState(0);
+  const [Name, setName] = useState(0);
+  const [Token, setToken] = useState(0);
+  const [Left, setLeft] = useState(0);
+
+  useEffect(() => {
+    const fetchData = () => {
+      const gliveRef = ref(db, 'PROSUMER/Generation/Live');
+      const gmonthlyRef = ref(db, 'PROSUMER/Generation/Monthly');
+      const gamtRef = ref(db, 'PROSUMER/Generation/Amount');
+      
+
+      onValue(gliveRef, (snapshot) => {
+        const val = snapshot.val();
+        const roundedVal = Number(val).toFixed(2);
+        setglive(roundedVal);
+      });
+
+      onValue(gmonthlyRef, (snapshot) => {
+        const val = snapshot.val();
+        setgmonthly(val);
+      });
+
+      onValue(gamtRef, (snapshot) => {
+        const val = snapshot.val();
+        setgmt(val);
+      });
+
+
+
+      const uliveRef = ref(db, 'PROSUMER/Usage/Live');
+      const umonthlyRef = ref(db, 'PROSUMER/Usage/Montly');
+      const uamtRef = ref(db, 'PROSUMER/Usage/Amount');
+      
+
+      onValue(uliveRef, (snapshot) => {
+        const val = snapshot.val();
+        const roundedVal = Number(val).toFixed(2);
+        setulive(roundedVal);
+      });
+
+      onValue(umonthlyRef, (snapshot) => {
+        const val = snapshot.val();
+        console.log(val);
+        setumonthly(val);
+      });
+
+      onValue(uamtRef, (snapshot) => {
+        const val = snapshot.val();
+        setuamt(val);
+      });
+
+      const id = ref(db, 'PROSUMER/Invester details/ID');
+      const name = ref(db, 'PROSUMER/Invester details/Name');
+      const token = ref(db, 'PROSUMER/Invester details/Token');
+      const left = ref(db, 'PROSUMER/Invester details/Left');
+      
+      onValue(id, (snapshot) => {
+        const val = snapshot.val();
+        // console.log(val);
+        setID(val);
+      });
+
+      onValue(name, (snapshot) => {
+        const val = snapshot.val();
+        setName(val);
+      });
+
+      onValue(token, (snapshot) => {
+        const val = snapshot.val();
+        
+        setToken(val);
+      });
+      
+
+      onValue(left, (snapshot) => {
+        const val = snapshot.val();
+        
+        setLeft(val);
+      });
+
+      
+    };
+
+    fetchData();
+  }, []);
+
   const investorList = [
     {
-      id: 'id156',
-      name: 'XYZ',
-      token: '14',
-      left: '50',
-    },
-    {
-      id: 'id157',
-      name: 'ABC',
-      token: '15',
-      left: '40',
-    },
-    {
-      id: 'id158',
-      name: 'PQR',
-      token: '12',
-      left: '35',
-    },
+      id: ID,
+      name: Name,
+      token: Token,
+      left: Left,
+    }
   ];
 
   return (
