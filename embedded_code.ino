@@ -50,16 +50,31 @@ void setup(){
 }
 
 void loop(){
-  int adc = analogRead(currentpin);
-float adc_voltage = adc * (3.3 / 4096.0);
-float current_voltage = (adc_voltage * (R1+R2)/R2);
-float current = (current_voltage - 2.5) / 0.100;
-Serial.println(adc);
-Serial.print("Current Value: ");
-Serial.println(current);
-delay(1000);
+  double a=getAnalogAmp();
+  Serial.println(a);
+  delay(1000);
   if (Firebase.isTokenExpired()){
     Firebase.refreshToken(&config);
     Serial.println("Refresh token");
   }
+}
+float getAnalogAmp()
+{
+  int   sampling = 250;
+  double mVperAmp = 185; 
+  float ACSoffset = 2470.345;
+  double RawValue = 0;
+  double V = 0;
+  double Amps = 0;
+  for(int i=0; i<sampling; i++)
+    {
+    RawValue += analogRead(ADC_AMP);
+    delay(1);
+    }
+  RawValue /= sampling;
+  V = (RawValue / 4096.0) * 5000; 
+  Amps = ((V - ACSoffset) / mVperAmp);
+  Serial.print( "Amps:");
+  Serial.println( Amps );
+  return Amps;
 }
