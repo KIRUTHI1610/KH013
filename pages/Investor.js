@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const App = () => {
-  const [glive, setglive] = useState(0.33);
-  const [gmonthly, setgmonthly] = useState(12);
-  const [gamt, setgmt] = useState(5);
 
-  const [ulive, setulive] = useState(0.3);
-  const [umonthly, setumonthly] = useState(20);
-  const [uamt, setuamt] = useState(6);
+const Investor = () => {
+  let razorpaykeyid = '';
+  let razorpaykeysecret = '';
+  let amt  = 100;
+  let currency ="INR";
+  function handler(){
 
-  const investorList = [
+  };
+//  console.log(RAZORPAY_KEY_ID,RAZORPAY_KEY_SECRET);
+
+  const currentprosumerList = [
     {
       id: 'id156',
       name: 'XYZ',
@@ -31,51 +33,61 @@ const App = () => {
       left: '35',
     },
   ];
+  const AvailableprosumerList = [
+    {
+      id: 'id156',
+      name: 'XYZ',
+      interest:25
+    },
+    {
+      id: 'id157',
+      name: 'ABC',
+      
+      interest:20
+    },
+    {
+      id: 'id158',
+      name: 'PQR',
+      interest:30
+    },
+  ];
 
   return (
     <View style={styles.container}>
-    <View style={styles.nav}>
+    {/* <View style={styles.nav}>
       <View></View>
       <Text style={styles.text}>
-        Prosumer
+        Investor
       </Text>
       <Icon name="user" size={40} color="#000" />
-    </View>
-    <Text style={styles.headingText}>Generation:</Text>
-    <View style={styles.generation}>
-      <View style={{flex:0.33,alignItems:'center'}}>
-        <Text>Live</Text>
-        <Text style={styles.values}>{glive}</Text>
-      </View>
-      <View style={{flex:0.33,alignItems:'center'}}>
-        <Text>Monthly</Text>
-        <Text style={styles.values}>{gmonthly}</Text>
-        </View>
-      <View style={{flex:0.33,alignItems:'center'}}>
-        <Text>Amount</Text>
-        <Text style={styles.values}>{gamt}</Text>
-      </View>
-      
-    </View>
-    <Text style={styles.headingText}>Usage:</Text>
-    <View style={styles.usage}>
-      <View style={{flex:0.33,alignItems:'center'}}>
-        <Text>Live</Text>
-        <Text style={styles.values}>{ulive}</Text>
-      </View>
-      <View style={{flex:0.33,alignItems:'center'}}>
-        <Text>Monthly</Text>
-        <Text style={styles.values}>{umonthly}</Text>
-        </View>
-      <View style={{flex:0.33,alignItems:'center'}}>
-        <Text>Amount</Text>
-        <Text style={styles.values}>{uamt}</Text>
-      </View>
-      
-    </View>
+    </View> */}
 
-      
-      <Text style={styles.headingText}>Investor Details:</Text>
+    
+
+    <Text style={styles.headingText}>Available Prosumer Details:</Text>
+      <View style={styles.table}>
+        <View style={styles.headerRow}>
+          <Text style={styles.headerCell}>ID</Text>
+          <Text style={styles.headerCell}>NAME</Text>
+          <Text style={styles.headerCell}>INTEREST</Text>
+          <Text style={styles.headerCell}>PAY</Text>
+
+
+         
+        </View>
+        {AvailableprosumerList.map((prosumer, index) => (
+          <View key={index} style={styles.dataRow}>
+            <Text style={styles.dataCell}>{prosumer.id}</Text>
+            <Text style={styles.dataCell}>{prosumer.name}</Text>
+            <Text style={styles.dataCell}>{prosumer.interest}</Text>
+            <TouchableOpacity onPress={handler} style={styles.buy}>
+        <Text style={styles.buyBox}>Buy</Text>
+      </TouchableOpacity>
+            
+          </View>
+        ))}
+      </View>
+      <Text style={styles.headingText}>Current Prosumer Details:</Text>
       <View style={styles.table}>
         <View style={styles.headerRow}>
           <Text style={styles.headerCell}>ID</Text>
@@ -83,12 +95,12 @@ const App = () => {
           <Text style={styles.headerCell}>TOKEN</Text>
           <Text style={styles.headerCell}>LEFT</Text>
         </View>
-        {investorList.map((investor, index) => (
+        {currentprosumerList.map((prosumer, index) => (
           <View key={index} style={styles.dataRow}>
-            <Text style={styles.dataCell}>{investor.id}</Text>
-            <Text style={styles.dataCell}>{investor.name}</Text>
-            <Text style={styles.dataCell}>{investor.token}</Text>
-            <Text style={styles.dataCell}>{investor.left}</Text>
+            <Text style={styles.dataCell}>{prosumer.id}</Text>
+            <Text style={styles.dataCell}>{prosumer.name}</Text>
+            <Text style={styles.dataCell}>{prosumer.token}</Text>
+            <Text style={styles.dataCell}>{prosumer.left}</Text>
           </View>
         ))}
       </View>
@@ -100,7 +112,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#DAF5FF',
-    paddingTop: 50,
+    paddingTop: 10,
     paddingRight: 20,
   },
 
@@ -175,10 +187,23 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
   },
   dataCell: {
-    fontSize: 16,
+    fontSize: 18,
     flex: 1,
     textAlign: 'center',
+    padding:7,
   },
+  buy:{
+    backgroundColor:'blue',
+    color:'white',
+    width:70,
+    height:30,
+    borderRadius:10,
+    alignItems:'center',
+    marginTop:7,
+  },buyBox:{
+    color:'white',
+    fontSize:18,
+  }
 });
 
-export default App;
+export default Investor;
